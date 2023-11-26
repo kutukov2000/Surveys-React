@@ -1,0 +1,14 @@
+h1{
+    text-align: center;
+    margin-top: 2vh;
+}
+
+.questions{
+    flex-direction: column;
+    align-items: center;
+    gap: 1vw;
+}
+
+.w-90{
+    width: 90%;
+}
