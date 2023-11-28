@@ -1,32 +1,70 @@
-import VariantText from './VariantText';
-import VariantRadioButton from './VariantRadioButton';
-import VariantCheckBox from './VariantCheckBox';
-import VariantDate from './VariantDate';
+import { Card, CardHeader, CardBody, Divider, Input } from "@nextui-org/react";
+import { CheckboxGroup, Checkbox, RadioGroup, Radio } from "@nextui-org/react";
+import { useState } from "react";
 
-function Question({ text, variants, questionType }) {
-    function checkQuestionType(variant) {
+function Question({id: questionId, text, variants, questionType,onAnswerSelected }) {
+
+    // const[answers,setAnswers]=useState([]);
+
+    // function handleChange(value){
+    //     setAnswers([...answers, value]);
+    //     onAnswerSelected(id,answers)
+    // }
+
+    function setVariants() {
         switch (questionType) {
-            case 1: return <VariantRadioButton key={variant.id} text={variant.text} />;
-            case 2: return <VariantCheckBox key={variant.id} text={variant.text} />;
-            default: return null;
+            case 0:
+                return <Input type='text'
+                              className='border border-primary'
+                              onChange={(event) => onAnswerSelected(questionId, event.target.value)}
+                              onFocus={(event) => onAnswerSelected(questionId, event.target.value)}
+                              />;
+            case 1:
+                return (
+                    <RadioGroup>
+                        {variants.$values.map(({ id, text: variantText }) => (
+                            <Radio value={variantText} 
+                            key={id}  
+                            onChange={(event) => onAnswerSelected(questionId, event.target.value)}
+                            onFocus={(event) => onAnswerSelected(questionId, event.target.value)}>
+                                {variantText}
+                            </Radio>
+                        ))}
+                    </RadioGroup>
+                );
+            case 2:
+                return (
+                    <CheckboxGroup>
+                        {variants.$values.map(({ id, text: variantText }) => (
+                            <Checkbox value={variantText} 
+                            key={id}  
+                            onChange={(event) => onAnswerSelected(questionId, event.target.value)}
+                            onFocus={(event) => onAnswerSelected(questionId, event.target.value)}>
+                                {variantText}
+                            </Checkbox>
+                        ))}
+                    </CheckboxGroup>
+                );
+            case 3:
+                return <Input type='date'
+                            className='border border-primary'
+                            onChange={(event) => onAnswerSelected(questionId, event.target.value)}
+                            onFocus={(event) => onAnswerSelected(questionId, event.target.value)}/>;
+            default:
+                return null;
         }
     }
 
     return (
-        <div className="card question w-40">
-            <div className="card-body">
-                <h5 className="card-title">{text}</h5>
-                <div>
-                    {questionType === 0 ? (
-                        <VariantText/>
-                    ) : questionType === 3 ? (
-                        <VariantDate/>
-                    ) : (
-                        variants.$values.map(variant => checkQuestionType(variant))
-                    )}
-                </div>
-            </div>
-        </div>
+        <Card className="w-40">
+            <CardHeader>
+                <h5>{text}</h5>
+            </CardHeader>
+            <Divider />
+            <CardBody>
+                <div>{setVariants()}</div>
+            </CardBody>
+        </Card>
     );
 }
 

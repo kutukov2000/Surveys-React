@@ -1,29 +1,35 @@
+import { Button, Input, Spinner } from '@nextui-org/react';
 import React, { useState, useEffect } from 'react';
+import useFetch from 'react-fetch-hook';
 import { useParams } from 'react-router-dom';
 
 function EditSurvey() {
-    const { surveyId } = useParams();
+    const { id } = useParams();
+    console.log(`SurveyId = ${id}`);
+
     const [formData, setFormData] = useState({
         title: '',
         description: '',
     });
 
+    const { isLoading, data } = useFetch(`https://localhost:7258/api/Surveys/${id}`);
+    
     useEffect(() => {
-        // Fetch survey data based on surveyId when the component mounts
-        // Replace 'your-api-endpoint' with the actual URL of your API endpoint for fetching survey data
-        fetch(`your-api-endpoint/${surveyId}`)
-            .then(response => response.json())
-            .then(data => {
-                // Set the form data with the retrieved survey data
-                setFormData({
-                    title: data.title,
-                    description: data.description,
-                });
-            })
-            .catch(error => {
-                console.error('Error fetching survey data:', error);
+        if (!isLoading && data) {
+            setFormData({
+                title: data.title,
+                description: data.description,
             });
-    }, [surveyId]);
+        }
+    }, [isLoading, data]);
+
+    if (isLoading) {
+        return (
+            <div className="d-flex justify-content-center align-items-center h-100 w-100">
+                <Spinner size="lg" />
+            </div>
+        );
+    }
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -32,26 +38,31 @@ function EditSurvey() {
             [name]: value,
         }));
     };
-
-    const handleSubmit = (e) => {
+    
+    const handleSubmit = async (e) => {
         e.preventDefault();
-
-        // Send updated formData to your server for survey editing
-        fetch(`your-api-endpoint/${surveyId}`, {
-            method: 'PUT', // Assuming your API supports updating surveys with a PUT request
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(formData),
-        })
-            .then(response => response.json())
-            .then(data => {
-                // Handle the response from the server
-                console.log('Survey updated successfully:', data);
-            })
-            .catch(error => {
-                console.error('Error updating survey:', error);
+        console.log('Submitting form with formData:', formData);
+    
+        try {
+            const response = await fetch(`https://localhost:7258/api/Surveys/${id}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(formData),
             });
+    
+            console.log('Response from server:', response);
+    
+            if (response.ok) {
+                const responseData = await response.json();
+                console.log('Survey updated successfully:', responseData);
+            } else {
+                console.error('Error updating survey:', response.statusText);
+            }
+        } catch (error) {
+            console.error('Error updating survey:', error.message);
+        }
     };
 
     return (
@@ -61,9 +72,8 @@ function EditSurvey() {
                     <label htmlFor="title" className="form-label">
                         Title
                     </label>
-                    <input
-                        type="text"
-                        className="form-control"
+                    <Input
+                        type='text'
                         id="title"
                         name="title"
                         value={formData.title}
@@ -83,9 +93,9 @@ function EditSurvey() {
                         onChange={handleChange}
                     />
                 </div>
-                <button type="submit" className="btn btn-primary">
+                <Button type="submit" color='primary'>
                     Update
-                </button>
+                </Button>
             </form>
         </div>
     );

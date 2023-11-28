@@ -1,3 +1,4 @@
+import { Button } from '@nextui-org/react';
 import React, { useState } from 'react';
 
 function AddSurvey() {
@@ -62,9 +63,9 @@ function AddSurvey() {
                         onChange={handleChange}
                     />
                 </div>
-                <button type="submit" className="btn btn-primary">
+                <Button type="sumbit" color='primary'>
                     Submit
-                </button>
+                </Button>
             </form>
         </div>
     );
