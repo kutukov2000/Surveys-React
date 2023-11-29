@@ -1,15 +1,7 @@
 import { Card, CardHeader, CardBody, Divider, Input } from "@nextui-org/react";
 import { CheckboxGroup, Checkbox, RadioGroup, Radio } from "@nextui-org/react";
-import { useState } from "react";
 
 function Question({id: questionId, text, variants, questionType,onAnswerSelected }) {
-
-    // const[answers,setAnswers]=useState([]);
-
-    // function handleChange(value){
-    //     setAnswers([...answers, value]);
-    //     onAnswerSelected(id,answers)
-    // }
 
     function setVariants() {
         switch (questionType) {
@@ -17,16 +9,15 @@ function Question({id: questionId, text, variants, questionType,onAnswerSelected
                 return <Input type='text'
                               className='border border-primary'
                               onChange={(event) => onAnswerSelected(questionId, event.target.value)}
-                              onFocus={(event) => onAnswerSelected(questionId, event.target.value)}
-                              />;
+                              onFocus={(event) => onAnswerSelected(questionId, event.target.value)}/>;
             case 1:
                 return (
                     <RadioGroup>
                         {variants.$values.map(({ id, text: variantText }) => (
                             <Radio value={variantText} 
-                            key={id}  
-                            onChange={(event) => onAnswerSelected(questionId, event.target.value)}
-                            onFocus={(event) => onAnswerSelected(questionId, event.target.value)}>
+                                   key={id}  
+                                   onChange={(event) => onAnswerSelected(questionId, event.target.value)}
+                                   onFocus={(event) => onAnswerSelected(questionId, event.target.value)}>
                                 {variantText}
                             </Radio>
                         ))}

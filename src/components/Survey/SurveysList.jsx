@@ -11,6 +11,8 @@ function SurveysList() {
     await fetch(`https://localhost:7258/api/Surveys/${id}`, {
       method: 'DELETE',
     });
+
+    window.location.reload();
   };
 
   if (isLoading) {
@@ -27,7 +29,7 @@ function SurveysList() {
         <SurveyCard key={survey.id} survey={survey} onDelete={deleteSurvey}/>
       ))}
       <Link to={`surveys/add`} className="w-25 mb-2">
-        <Button color="success" className="w-100">
+        <Button color="success" className="w-100 text-light">
           Add new
         </Button>
       </Link>

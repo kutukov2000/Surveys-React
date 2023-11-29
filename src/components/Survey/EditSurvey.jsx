@@ -2,6 +2,7 @@ import { Button, Input, Spinner } from '@nextui-org/react';
 import React, { useState, useEffect } from 'react';
 import useFetch from 'react-fetch-hook';
 import { useParams } from 'react-router-dom';
+import SurveyWithQuestions from './SurveyWithQuestions';
 
 function EditSurvey() {
     const { id } = useParams();
@@ -12,16 +13,16 @@ function EditSurvey() {
         description: '',
     });
 
-    const { isLoading, data } = useFetch(`https://localhost:7258/api/Surveys/${id}`);
+    const { isLoading, data: survey } = useFetch(`https://localhost:7258/api/Surveys/${id}`);
     
     useEffect(() => {
-        if (!isLoading && data) {
+        if (!isLoading && survey) {
             setFormData({
-                title: data.title,
-                description: data.description,
+                title: survey.title,
+                description: survey.description,
             });
         }
-    }, [isLoading, data]);
+    }, [isLoading, survey]);
 
     if (isLoading) {
         return (
@@ -66,7 +67,7 @@ function EditSurvey() {
     };
 
     return (
-        <div className="d-flex justify-content-center mt-3">
+        <div className="d-flex flex-column align-items-center mt-3">
             <form className="w-40" onSubmit={handleSubmit}>
                 <div className="mb-3">
                     <label htmlFor="title" className="form-label">
@@ -78,8 +79,7 @@ function EditSurvey() {
                         name="title"
                         value={formData.title}
                         onChange={handleChange}
-                        required
-                    />
+                        required />
                 </div>
                 <div className="mb-3">
                     <label htmlFor="description" className="form-label">
@@ -90,13 +90,15 @@ function EditSurvey() {
                         id="description"
                         name="description"
                         value={formData.description}
-                        onChange={handleChange}
-                    />
+                        onChange={handleChange} />
                 </div>
-                <Button type="submit" color='primary'>
-                    Update
-                </Button>
+                <div className='d-flex justify-content-end'>
+                    <Button type="submit" color='primary'>
+                        Update
+                    </Button>
+                </div>
             </form>
+            <SurveyWithQuestions survey={survey}/>
         </div>
     );
 }

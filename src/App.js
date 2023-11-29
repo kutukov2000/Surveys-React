@@ -1,10 +1,10 @@
-import SurveysList from "./components/SurveysList";
+import SurveysList from "./components/Survey/SurveysList";
 import Layout from "./components/Layout"
 import { Routes, Route }  from "react-router-dom";
-import SurveyWithQuestions from "./components/SurveyWithQuestions";
-import AddSurvey from "./components/AddSurvey";
-import EditSurvey from "./components/EditSurvey";
-import Survey from "./components/Survey";
+import SurveyWithQuestions from "./components/Survey/SurveyWithQuestions";
+import AddSurvey from "./components/Survey/AddSurvey";
+import EditSurvey from "./components/Survey/EditSurvey";
+import Survey from "./components/Survey/Survey";
 function App() {
   return (
     <div className="App">
