@@ -6,7 +6,7 @@ import SurveysService from "../Services/SurveysService";
 
 function SurveysList() {
 
-  const { isLoading, data } = useFetch("https://localhost:7258/api/Surveys");
+  const { isLoading, data } = useFetch("https://surveysapi.azurewebsites.net/api/Surveys");
   const surveys = data?.["$values"] || [];
 
   if (isLoading) {

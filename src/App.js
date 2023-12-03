@@ -7,6 +7,7 @@ import Survey from "./components/Survey/Survey";
 import SurveyResult from "./components/Survey/SurveyResult";
 
 function App() {
+  console.log(process.env.SURVEY_API)
   return (
     <div className="App">
       <Routes>

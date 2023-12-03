@@ -10,7 +10,7 @@ function SurveyResult(){
 
     //Load survey data
     const { id } = useParams();
-    const { isLoading, data:survey } = useFetch(`https://localhost:7258/api/Surveys/${id}`);
+    const { isLoading, data:survey } = useFetch(`https://surveysapi.azurewebsites.net/api/Surveys/${id}`);
 
     if (isLoading) {
         return (

@@ -5,7 +5,7 @@ export default class VariantsService{
             "questionId": questionId
         }
 
-        await fetch('https://localhost:7258/api/Variants', {
+        await fetch('https://surveysapi.azurewebsites.net/api/Variants', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -18,7 +18,7 @@ export default class VariantsService{
 
     static async deleteByQuestionId(questionId){
         try {
-            const response = await fetch(`https://localhost:7258/api/Variants/byQuestionId?questionId=${questionId}`, {
+            const response = await fetch(`https://surveysapi.azurewebsites.net/api/Variants/byQuestionId?questionId=${questionId}`, {
                 method: 'DELETE',
                 headers: {
                     'Content-Type': 'application/json',

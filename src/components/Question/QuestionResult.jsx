@@ -5,7 +5,7 @@ import { useState, useEffect } from "react";
 function QuestionResult({ id: questionId, text }) {
 
     //Load Answers
-    const { isLoading, data: answers } = useFetch(`https://localhost:7258/api/Answers/byQuestionId?questionIdid=${questionId}`);
+    const { isLoading, data: answers } = useFetch(`https://surveysapi.azurewebsites.net/api/Answers/byQuestionId?questionIdid=${questionId}`);
 
     //Show only unique answers
     const [uniqueAnswers, setUniqueAnswers] = useState([]);

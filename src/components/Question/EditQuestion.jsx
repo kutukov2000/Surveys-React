@@ -10,7 +10,7 @@ import { useForm } from "react-hook-form";
 function EditQuestion({ question, onDelete }) {
 
     //Form hook
-    const { register, handleSubmit, formState: { errors }, } = useForm();
+    const { register, handleSubmit, formState: { errors } } = useForm();
 
     //Loading Button
     const [isLoadingButton, setIsLoadingButton] = useState(false);

@@ -4,7 +4,7 @@ import VariantsService from "./VariantsService";
 export default class QuestionService{
 
     static async postQuestion(question){
-        const response = await fetch('https://localhost:7258/api/Questions', {
+        const response = await fetch('https://surveysapi.azurewebsites.net/api/Questions', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -20,7 +20,7 @@ export default class QuestionService{
         console.log('Question:', question);
 
         try {
-            const response = await fetch(`https://localhost:7258/api/Questions/${id}`, {
+            const response = await fetch(`https://surveysapi.azurewebsites.net/api/Questions/${id}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
@@ -42,7 +42,7 @@ export default class QuestionService{
     };
 
     static async deleteQuestion(id){
-        await fetch(`https://localhost:7258/api/Questions/${id}`, {
+        await fetch(`https://surveysapi.azurewebsites.net/api/Questions/${id}`, {
             method: 'DELETE',
         });
 
