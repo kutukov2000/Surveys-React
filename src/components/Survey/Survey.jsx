@@ -4,10 +4,10 @@ import { useParams } from "react-router-dom";
 import { Button, Spinner } from "@nextui-org/react";
 import { useState } from "react";
 import AnswersService from "../Services/AnswersService";
-import '../Styles/SurveyWithQuastions.css'
 import BackButton from "./Helpers/BackButton";
 import { toastOptions } from "./Helpers/toastConfig";
 import toast, { Toaster } from 'react-hot-toast';
+import '../Styles/SurveyWithQuastions.css'
 
 function Survey() {
 

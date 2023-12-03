@@ -13,10 +13,10 @@ function App() {
       <Routes>
         <Route path='/' element={<Layout />}>
           <Route index element={<SurveysList/>} />
-          <Route path='surveys/:id' element={<Survey/>} />
-          <Route path='surveys/add' element={<AddSurvey/>} />
-          <Route path='survey/edit/:id' element={<EditSurvey/>} />
-          <Route path='survey/result/:id' element={<SurveyResult/>} />
+          <Route path='/surveys/:id' element={<Survey/>} />
+          <Route path='~/surveys/add' element={<AddSurvey/>} />
+          <Route path='/survey/edit/:id' element={<EditSurvey/>} />
+          <Route path='/survey/result/:id' element={<SurveyResult/>} />
           <Route path='*' element={<p>Page Not Found!</p>} />
         </Route>
       </Routes>
