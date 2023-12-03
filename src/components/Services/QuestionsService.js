@@ -1,4 +1,19 @@
+import AnswersService from "./AnswersService";
+import VariantsService from "./VariantsService";
+
 export default class QuestionService{
+
+    static async postQuestion(question){
+        const response = await fetch('https://localhost:7258/api/Questions', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(question)
+        });
+
+        return await response.json();
+    }
 
     static async putQuestion(id,question){
 
@@ -31,6 +46,7 @@ export default class QuestionService{
             method: 'DELETE',
         });
 
-        window.location.reload();
+        await VariantsService.deleteByQuestionId(id);
+        await AnswersService.deleteByQuestionId(id);
     };
 }

@@ -1,118 +1,66 @@
-import {Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Button, useDisclosure} from "@nextui-org/react";
 import React, { useState } from 'react';
+import { Button, Input, Textarea } from "@nextui-org/react";
+import { useForm } from "react-hook-form";
+import toast, { Toaster } from "react-hot-toast";
+import { toastOptions } from "./Helpers/toastConfig";
+import SurveysService from "../Services/SurveysService";
+import BackButton from "./Helpers/BackButton";
 
 function AddSurvey() {
 
-    const {isOpen, onOpen, onOpenChange} = useDisclosure();
+  //Loading Button
+  const [isLoadingButton, setIsLoadingButton] = useState(false);
 
-    const [survey, setSurvey] = useState({
-        title: '',
-        description: '',
-    });
+  //Form hook
+  const { register, handleSubmit, formState: { errors }, } = useForm();
 
-    const handleChange = (e) => {
-        const { name, value } = e.target;
-        setSurvey((prevData) => ({
-            ...prevData,
-            [name]: value,
-        }));
-    };
+  //Post data
+  const onSubmit = async (newSurvey) => {
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
+    setIsLoadingButton(true);
 
-        const response = fetch('https://localhost:7258/api/Surveys', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(survey),
-        })
-            .then(response => response.json())
-            .then(data => {
-                console.log('Server response:', data);
-            })
-            .catch(error => {
-                console.error('Error sending data to the server:', error);
-            });
+    const isCreated = await SurveysService.postSurvey(newSurvey);
+    switch (isCreated) {
+      case true: toast.success("Successfully created!"); break;
+      case false:
+      default: toast.error("Error. Check data");
+    }
 
-            if(response.status===200){
-                console.log(response.status);
-                onOpen();
-            }
-    };
+    setIsLoadingButton(false);
+  };
 
-    return (
-        <div className="d-flex justify-content-center mt-3">
-            <form className="w-40" onSubmit={handleSubmit}>
-                <div className="mb-3">
-                    <label htmlFor="title" className="form-label">
-                        Title
-                    </label>
-                    <input
-                        type="text"
-                        className="form-control"
-                        id="title"
-                        name="title"
-                        value={survey.title}
-                        onChange={handleChange}
-                        required
-                    />
-                </div>
-                <div className="mb-3">
-                    <label htmlFor="description" className="form-label">
-                        Description
-                    </label>
-                    <textarea
-                        className="form-control"
-                        id="description"
-                        name="description"
-                        value={survey.description}
-                        onChange={handleChange}
-                    />
-                </div>
-                <Button type="sumbit" color='primary'>
-                    Submit
-                </Button>
-            </form>
-            <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
-        <ModalContent>
-          {(onClose) => (
-            <>
-              <ModalHeader className="flex flex-col gap-1">Modal Title</ModalHeader>
-              <ModalBody>
-                <p> 
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                  Nullam pulvinar risus non risus hendrerit venenatis.
-                  Pellentesque sit amet hendrerit risus, sed porttitor quam.
-                </p>
-                <p>
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                  Nullam pulvinar risus non risus hendrerit venenatis.
-                  Pellentesque sit amet hendrerit risus, sed porttitor quam.
-                </p>
-                <p>
-                  Magna exercitation reprehenderit magna aute tempor cupidatat consequat elit
-                  dolor adipisicing. Mollit dolor eiusmod sunt ex incididunt cillum quis. 
-                  Velit duis sit officia eiusmod Lorem aliqua enim laboris do dolor eiusmod. 
-                  Et mollit incididunt nisi consectetur esse laborum eiusmod pariatur 
-                  proident Lorem eiusmod et. Culpa deserunt nostrud ad veniam.
-                </p>
-              </ModalBody>
-              <ModalFooter>
-                <Button color="danger" variant="light" onPress={onClose}>
-                  Close
-                </Button>
-                <Button color="primary" onPress={onClose}>
-                  Action
-                </Button>
-              </ModalFooter>
-            </>
-          )}
-        </ModalContent>
-      </Modal>
-        </div>
-    );
+  return (
+    <div className="m-3">
+      <BackButton />
+      <div className="d-flex justify-content-center mt-3">
+        <form className="w-40" onSubmit={handleSubmit(onSubmit)}>
+          <div className="mb-3">
+            <Input
+              {...register('title', { required: 'Title is required' })}
+              variant="bordered"
+              label="Title"
+              labelPlacement="outside"
+              type="text" />
+            {errors.title && <p style={{ color: '#cc4137' }}>{errors.title.message}</p>}
+  
+          </div>
+          <div className="mb-3">
+            <Textarea
+              {...register('description')}
+              label="Description"
+              labelPlacement="outside"
+              variant="bordered" />
+          </div>
+          <div className='d-flex justify-content-end'>
+            <Button type="submit" color="primary" isLoading={isLoadingButton}>
+              {isLoadingButton ? 'Creating' : 'Create'}
+            </Button>
+          </div>
+        </form>
+        <Toaster toastOptions={toastOptions} />
+      </div>
+    </div>
+  );
 }
 
 export default AddSurvey;

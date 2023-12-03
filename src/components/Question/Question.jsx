@@ -1,24 +1,19 @@
 import { Card, CardHeader, CardBody, Divider, Input } from "@nextui-org/react";
 import { CheckboxGroup, Checkbox, RadioGroup, Radio } from "@nextui-org/react";
 
-function Question({id: questionId, text, variants, questionType,onAnswerSelected }) {
+function Question({ id: questionId, text, variants, questionType, onAnswerSelected }) {
 
     function setVariants() {
         switch (questionType) {
-            case 0:
-                return <Input type='text'
-                              className='border border-primary'
-                              onChange={(event) => onAnswerSelected(questionId, event.target.value)}
-                              onFocus={(event) => onAnswerSelected(questionId, event.target.value)}/>;
             case 1:
                 return (
                     <RadioGroup>
                         {variants.$values.map(({ id, text: variantText }) => (
-                            <Radio value={variantText} 
-                                   key={id}  
+                            <Radio value={variantText}
+                                   key={id}
                                    onChange={(event) => onAnswerSelected(questionId, event.target.value)}
                                    onFocus={(event) => onAnswerSelected(questionId, event.target.value)}>
-                                {variantText}
+                                   {variantText}
                             </Radio>
                         ))}
                     </RadioGroup>
@@ -27,22 +22,26 @@ function Question({id: questionId, text, variants, questionType,onAnswerSelected
                 return (
                     <CheckboxGroup>
                         {variants.$values.map(({ id, text: variantText }) => (
-                            <Checkbox value={variantText} 
-                            key={id}  
-                            onChange={(event) => onAnswerSelected(questionId, event.target.value)}
-                            onFocus={(event) => onAnswerSelected(questionId, event.target.value)}>
-                                {variantText}
+                            <Checkbox value={variantText}
+                                      key={id}
+                                      onChange={(event) => onAnswerSelected(questionId, event.target.value)}
+                                      onFocus={(event) => onAnswerSelected(questionId, event.target.value)}>
+                                      {variantText}
                             </Checkbox>
                         ))}
                     </CheckboxGroup>
                 );
             case 3:
                 return <Input type='date'
-                            className='border border-primary'
-                            onChange={(event) => onAnswerSelected(questionId, event.target.value)}
-                            onFocus={(event) => onAnswerSelected(questionId, event.target.value)}/>;
+                              variant="bordered"
+                              onChange={(event) => onAnswerSelected(questionId, event.target.value)}
+                              onFocus={(event) => onAnswerSelected(questionId, event.target.value)} />;
+            case 0:
             default:
-                return null;
+                return <Input type='text'
+                              variant="bordered"
+                              onChange={(event) => onAnswerSelected(questionId, event.target.value)}
+                              onFocus={(event) => onAnswerSelected(questionId, event.target.value)} />;
         }
     }
 

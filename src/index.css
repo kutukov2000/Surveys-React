@@ -27,3 +27,8 @@ code {
 .App>div{
   height: 100vh;
 }
+
+.backButton{
+  position: sticky;
+  top: 2vw;
+}

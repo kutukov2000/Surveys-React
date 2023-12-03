@@ -1,28 +1,40 @@
-import { Button, Input, Spinner } from '@nextui-org/react';
-import React, { useState, useEffect } from 'react';
+import { Button, Input, Spinner, Textarea } from '@nextui-org/react';
 import useFetch from 'react-fetch-hook';
 import { useParams } from 'react-router-dom';
 import SurveyWithQuestions from './SurveyWithQuestions';
+import SurveysService from '../Services/SurveysService';
+import BackButton from './Helpers/BackButton';
+import toast, { Toaster } from 'react-hot-toast';
+import { useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { toastOptions } from './Helpers/toastConfig';
 
 function EditSurvey() {
+
+    //Load survey data
     const { id } = useParams();
-    console.log(`SurveyId = ${id}`);
-
-    const [formData, setFormData] = useState({
-        title: '',
-        description: '',
-    });
-
     const { isLoading, data: survey } = useFetch(`https://localhost:7258/api/Surveys/${id}`);
-    
-    useEffect(() => {
-        if (!isLoading && survey) {
-            setFormData({
-                title: survey.title,
-                description: survey.description,
-            });
+
+    //Loading Button
+    const [isLoadingButton, setIsLoadingButton] = useState(false);
+
+    //Form hook
+    const { register, handleSubmit, formState: { errors }, } = useForm();
+
+    //Put survey
+    const onSubmit = async (updatedSurvey) => {
+
+        setIsLoadingButton(true);
+
+        const isUpdated = await SurveysService.putSurvey(id, updatedSurvey);
+        switch (isUpdated) {
+            case true: toast.success("Successfully updated!"); break;
+            case false:
+            default: toast.error("Error. Check data");
         }
-    }, [isLoading, survey]);
+
+        setIsLoadingButton(false);
+    };
 
     if (isLoading) {
         return (
@@ -32,73 +44,38 @@ function EditSurvey() {
         );
     }
 
-    const handleChange = (e) => {
-        const { name, value } = e.target;
-        setFormData((prevData) => ({
-            ...prevData,
-            [name]: value,
-        }));
-    };
-    
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        console.log('Submitting form with formData:', formData);
-    
-        try {
-            const response = await fetch(`https://localhost:7258/api/Surveys/${id}`, {
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(formData),
-            });
-    
-            console.log('Response from server:', response);
-    
-            if (response.ok) {
-                const responseData = await response.json();
-                console.log('Survey updated successfully:', responseData);
-            } else {
-                console.error('Error updating survey:', response.statusText);
-            }
-        } catch (error) {
-            console.error('Error updating survey:', error.message);
-        }
-    };
-
     return (
-        <div className="d-flex flex-column align-items-center mt-3">
-            <form className="w-40" onSubmit={handleSubmit}>
-                <div className="mb-3">
-                    <label htmlFor="title" className="form-label">
-                        Title
-                    </label>
-                    <Input
-                        type='text'
-                        id="title"
-                        name="title"
-                        value={formData.title}
-                        onChange={handleChange}
-                        required />
-                </div>
-                <div className="mb-3">
-                    <label htmlFor="description" className="form-label">
-                        Description
-                    </label>
-                    <textarea
-                        className="form-control"
-                        id="description"
-                        name="description"
-                        value={formData.description}
-                        onChange={handleChange} />
-                </div>
-                <div className='d-flex justify-content-end'>
-                    <Button type="submit" color='primary'>
-                        Update
-                    </Button>
-                </div>
-            </form>
-            <SurveyWithQuestions survey={survey}/>
+        <div className="m-3">
+            <BackButton />
+            <div className="d-flex flex-column align-items-center mt-3">
+                <form className="w-40" onSubmit={handleSubmit(onSubmit)}>
+                    <div className="mb-3">
+                        <Input
+                            {...register('title', { required: 'Title is required' })}
+                            label="Title"
+                            labelPlacement="outside"
+                            type='text'
+                            variant="bordered"
+                            defaultValue={survey.title} />
+                        {errors.title && <p style={{ color: '#cc4137' }}>{errors.title.message}</p>}
+                    </div>
+                    <div className="mb-3">
+                        <Textarea
+                            {...register('description')}
+                            label="Description"
+                            labelPlacement="outside"
+                            variant="bordered"
+                            defaultValue={survey.description} />
+                    </div>
+                    <div className='d-flex justify-content-end'>
+                        <Button type="submit" color="primary" isLoading={isLoadingButton}>
+                            {isLoadingButton ? 'Updating' : 'Update'}
+                        </Button>
+                    </div>
+                </form>
+                <SurveyWithQuestions survey={survey} />
+                <Toaster toastOptions={toastOptions} />
+            </div>
         </div>
     );
 }

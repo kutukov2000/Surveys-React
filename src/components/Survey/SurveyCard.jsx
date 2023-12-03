@@ -1,5 +1,6 @@
 import { Button, Card, CardHeader, Divider, CardBody, CardFooter } from '@nextui-org/react';
 import { Link } from 'react-router-dom';
+
 function SurveyCard({survey,onDelete}) {
     return (
         <Card className='w-40'>
@@ -13,8 +14,8 @@ function SurveyCard({survey,onDelete}) {
             <Divider />
             <CardFooter>
                 <div className='d-flex gap-2'>
-                    {/* <Link to={`questions/${survey.id}`}><Button color='primary'>Take a survey</Button></Link> */}
                     <Link to={`surveys/${survey.id}`}><Button color='primary'>Take a survey</Button></Link>
+                    <Link to={`survey/result/${survey.id}`}><Button color='success' className='text-light'>Results</Button></Link>
                     <Link to={`survey/edit/${survey.id}`}><Button color='warning'>Edit survey</Button></Link>
                     <Button onClick={() => onDelete(survey.id)} color='danger'>Delete</Button>
                 </div>

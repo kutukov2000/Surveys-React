@@ -3,14 +3,21 @@ import useFetch from "react-fetch-hook";
 import { useParams } from "react-router-dom";
 import { Button, Spinner } from "@nextui-org/react";
 import { useState } from "react";
+import AnswersService from "../Services/AnswersService";
 import '../Styles/SurveyWithQuastions.css'
+import BackButton from "./Helpers/BackButton";
+import { toastOptions } from "./Helpers/toastConfig";
+import toast, { Toaster } from 'react-hot-toast';
 
 function Survey() {
+
+    //Load survey data
     const { id } = useParams();
-    const { isLoading, data } = useFetch(`https://localhost:7258/api/Surveys/${id}`);
+    const { isLoading, data: survey } = useFetch(`https://localhost:7258/api/Surveys/${id}`);
 
+    //Answers
     const [answers, setAnswers] = useState([]);
-
+    
     const handleAnswerChanged = (questionId, answer) => {
         const existingAnswerIndex = answers.findIndex(a => a.questionId === questionId);
 
@@ -24,28 +31,12 @@ function Survey() {
         setAnswers(prevAnswers => [...prevAnswers, newAnswer]);
     };
 
+    async function postAnswers() {
 
-    const handleAnswerSelected = (questionId, answer) => {
-        console.log(`Question ${questionId} selected answer: ${answer}`);
-        console.log(answers);
-        handleAnswerChanged(questionId, answer);
-    };
+        await AnswersService.postAnswers(answers);
 
-    function postAnswers() {
-        answers.forEach(async (answer) => await fetch('https://localhost:7258/api/Answers', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                "text": [
-                  answer.text
-                ],
-                "questionId": answer.questionId
-              }),
-        }));
+        toast.success("We save your answer!");
     }
-
 
     if (isLoading) {
         return (
@@ -55,22 +46,26 @@ function Survey() {
         );
     }
 
-    const survey = data ? data : null;
-
     return (
-        <div className="d-flex justify-content-center w-100 mb-3">
-            <div className="d-flex flex-column">
-                <h1 className="fs-3 fw-semibold">{survey.title}</h1>
-                <p>{survey.description}</p>
-                <div className="d-flex flex-column gap-3 mb-3 mt-3">
-                    {survey.questions.$values.map(question => (
-                        <Question key={question.id} id={question.id} text={question.text} variants={question.variants} questionType={question.type} onAnswerSelected={handleAnswerSelected} />
-                    ))}
-                </div>
-                <div className="d-flex justify-content-end">
-                    <Button onClick={postAnswers} color="primary">Submit answers</Button>
+        <div className="m-3">
+            <BackButton />
+            <div className="d-flex justify-content-center w-100 mb-3">
+                <div className="d-flex flex-column">
+                    <h1 className="fs-3 fw-semibold m-0 mb-3 text-center">{survey.title}</h1>
+                    <p>{survey.description}</p>
+                    <div className="d-flex flex-column gap-3 mb-3 mt-3">
+                        {survey.questions.$values.map(question => (
+                            <Question key={question.id} id={question.id} text={question.text} variants={question.variants} questionType={question.type} onAnswerSelected={handleAnswerChanged} />
+                        ))}
+                    </div>
+                    <div className="d-flex justify-content-end">
+                        <Button onClick={postAnswers} color="primary">
+                            Submit
+                        </Button>
+                    </div>
                 </div>
             </div>
+            <Toaster toastOptions={toastOptions} />
         </div>
     );
 }

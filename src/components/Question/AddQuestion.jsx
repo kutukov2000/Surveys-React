@@ -1,174 +1,96 @@
+import React, { useState } from 'react';
 import { Card, CardHeader, CardBody, CardFooter, Divider, Button, Input } from "@nextui-org/react";
-import { CheckboxGroup, Checkbox, RadioGroup, Radio } from "@nextui-org/react";
-import { Dropdown, DropdownTrigger, DropdownMenu, DropdownItem } from "@nextui-org/react";
-import { useMemo, useState } from 'react';
+import QuestionService from "../Services/QuestionsService";
+import VariantsService from "../Services/VariantsService";
+import QuestionTypes from "./Helpers/QuestionTypes";
+import QuestionTypeDropdown from "./Helpers/QuestionTypeDropdown";
+import EditableVariants from './Helpers/EditableVariants';
+import { useForm } from 'react-hook-form';
 
-function AddQuestion(surveyId) {
+function AddQuestion({ surveyId, onQuestionAdd }) {
 
-    //Combobox 
-    const [selectedKeys, setSelectedKeys] = useState(new Set(["text"]));
-    const selectedValue = useMemo(
-        () => Array.from(selectedKeys).join(", ").replaceAll("_", " "),
-        [selectedKeys]
+  //Form hook
+  const { register, handleSubmit, formState: { errors }, reset} = useForm();
+
+  //Loading Button
+  const [isLoadingButton, setIsLoadingButton] = useState(false);
+
+  //Combobox    
+  const [selectedKeys, setSelectedKeys] = useState(new Set(["Text"]));
+  const questionType = Array.from(selectedKeys).join(", ").replaceAll("_", " ");
+
+  //Variants
+  const [variants, setVariants] = useState([]);
+  const addVariant = () => { setVariants([...variants, { text: "", id: variants.length }]); }
+  const removeVariant = (id) => { setVariants(variants.filter((variant) => variant.id !== id)); };
+
+  const handleVariantChange = (variantId, newText) => {
+    setVariants((prevVariants) =>
+      prevVariants.map((variant) =>
+        variant.id === variantId ? { ...variant, text: newText } : variant
+      )
     );
+  };
 
-    //Question
-    const [title, setTitle] = useState();
-    const handleTitleChange = (newTitle) => {
-        setTitle(newTitle);
+  const onSubmit = async (data) => {
+    const question = {
+      "text": data.title,
+      "type": QuestionTypes.getTypeByText(questionType),
+      "surveyId": surveyId
     }
 
-    //Variants
-    const [variants, setVariants] = useState([]);
-    const addVariant = () => {
-        setVariants([...variants, { text: "", id: variants.length }]);
-    }
-    const removeVariant = (variantId) => {
-        setVariants(variants.filter((variant) => variant.id !== variantId));
+    setIsLoadingButton(true);
+
+    const createdQuestionId = await QuestionService.postQuestion(question);
+
+    variants.forEach(async (variant) => await VariantsService.postVariant(createdQuestionId, variant.text));
+
+    setIsLoadingButton(false);
+    const newQuestion = {
+      id: createdQuestionId,
+      text: data.title,
+      type: QuestionTypes.getTypeByText(questionType),
+      variants: { $values: variants }
     };
-    const handleVariantChange = (variantId, newText) => {
-        setVariants((prevVariants) =>
-            prevVariants.map((variant) =>
-                variant.id === variantId ? { ...variant, text: newText } : variant
-            )
-        );
-    };
 
-    function SetVariantsType() {
-        switch (selectedValue) {
-            case 'RadioButton':
-                return (
-                    <div>
-                        <RadioGroup>
-                            {variants.map(({ text: variantText, id }, index) => (
-                                <div key={index} className="d-flex justify-content-between align-items-center gap-2">
-                                    <Radio value='' isDisabled={true} key={id}/>
-                                    <Input className="w-100" 
-                                        size='sm'
-                                        type="text"
-                                        value={variantText}
-                                        onChange={(e) => handleVariantChange(id, e.target.value)}/>
-                                    <Button onClick={() => removeVariant(id)} isIconOnly >❌</Button>
-                                </div>
-                            ))}
-                        </RadioGroup>
-                        <Button className="mt-3" onClick={addVariant}>Add variant</Button>
-                    </div>
-                );
-            case 'CheckBox':
-                return (
-                    <div>
-                        <CheckboxGroup>
-                            {variants.map(({ text: variantText, id }, index) => (
-                                <div key={index} className="d-flex justify-content-between align-items-center gap-2">
-                                    <Checkbox key={id} isDisabled={true}/>
-                                    <Input className="w-100" 
-                                        size='sm'
-                                        type="text"
-                                        value={variantText}
-                                        onChange={(e) => handleVariantChange(id, e.target.value)}/>
-                                    <Button onClick={() => removeVariant(id)} isIconOnly >❌</Button>
-                                </div>
-                            ))}
-                        </CheckboxGroup>
-                        <Button className="mt-3" onClick={addVariant}>Add variant</Button>
-                    </div>
-                );
-            default:
-                return null;
-        }
-    }
+    onQuestionAdd(newQuestion);
 
-    function getType() {
-        switch (selectedValue) {
-            case 'Text': return 0;
-            case 'RadioButton': return 1;
-            case 'CheckBox': return 2;
-            case 'Date': return 3;
-            default: return null;
-        }
-    }
+    reset();
+    setVariants([]);
+  }
 
-    async function postVariant(text, questionId) {
-        const variant = {
-            "text": text,
-            "questionId": questionId
-        }
-        await fetch('https://localhost:7258/api/Variants', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(variant)
-        });
-
-        console.log(variant);
-    }
-
-    const PostQuestionWithVariants = async () => {
-        const question = {
-            "text": title,
-            "type": getType(),
-            "surveyId": surveyId.surveyId
-        }
-
-        const response = await fetch('https://localhost:7258/api/Questions', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(question)
-        });
-
-        const createdQuestionId = await response.json();
-
-        variants.forEach((variant) => postVariant(variant.text, createdQuestionId));
-    }
-
-    return (
-        <Card className="w-40">
-            <CardHeader className='flex-column align-items-start gap-3'>
-                <Input type="text" 
-                       label="Question" 
-                       color="primary"
-                       onChange={(e) => handleTitleChange(e.target.value)} />
-                <div className='d-flex align-items-center gap-2'>
-                    <p className='fs-5 h-100'>Type:</p>
-                    <Dropdown>
-                        <DropdownTrigger>
-                            <Button
-                                variant="bordered"
-                                className="capitalize">
-                                {selectedValue}
-                            </Button>
-                        </DropdownTrigger>
-                        <DropdownMenu
-                            aria-label="Single selection example"
-                            variant="flat"
-                            disallowEmptySelection
-                            selectionMode="single"
-                            selectedKeys={selectedKeys}
-                            onSelectionChange={setSelectedKeys}>
-                            <DropdownItem key="Text">Text</DropdownItem>
-                            <DropdownItem key="RadioButton">RadioButton</DropdownItem>
-                            <DropdownItem key="CheckBox">CheckBox</DropdownItem>
-                            <DropdownItem key="Date">Date</DropdownItem>
-                        </DropdownMenu>
-                    </Dropdown>
-                </div>
-            </CardHeader>
-            <Divider />
-            <CardBody>
-                {SetVariantsType()}
-            </CardBody>
-            <Divider />
-            <CardFooter className="d-flex justify-content-end">
-                <Button className="text-light" onClick={PostQuestionWithVariants} color="success">
-                    Add Question
-                </Button>
-            </CardFooter>
-        </Card>
-    );
+  return (
+    <Card className="w-40">
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <CardHeader className='flex-column align-items-start gap-3'>
+          <Input
+            {...register('title', { required: 'Question title is required' })}
+            type="text"
+            label="Create Question"
+            labelPlacement="outside"
+            size="lg"
+            color="success" />
+          {errors.title && <p style={{ color: '#cc4137' }}>{errors.title.message}</p>}
+          <QuestionTypeDropdown selectedKeys={selectedKeys} selectedValue={questionType} setSelectedKeys={setSelectedKeys} />
+        </CardHeader>
+        <Divider />
+        <CardBody>
+          <EditableVariants
+            questionType={questionType}
+            variants={variants}
+            addVariant={addVariant}
+            removeVariant={removeVariant}
+            handleVariantChange={handleVariantChange} />
+        </CardBody>
+        <Divider />
+        <CardFooter className="d-flex justify-content-end">
+          <Button type="submit" className="text-light" color="success" isLoading={isLoadingButton}>
+              {isLoadingButton ? 'Creating' : 'Create Question'}
+            </Button>
+        </CardFooter>
+      </form>
+    </Card>
+  );
 }
 
 export default AddQuestion;
