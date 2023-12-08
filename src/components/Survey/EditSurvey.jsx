@@ -8,8 +8,13 @@ import toast, { Toaster } from 'react-hot-toast';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { toastOptions } from './Helpers/toastConfig';
+import { useSelector } from 'react-redux';
+import { selectToken } from '../../store/userSlice';
 
 function EditSurvey() {
+
+    //Get token
+    const token = useSelector(selectToken);
 
     //Load survey data
     const { id } = useParams();
@@ -26,7 +31,7 @@ function EditSurvey() {
 
         setIsLoadingButton(true);
 
-        const isUpdated = await SurveysService.putSurvey(id, updatedSurvey);
+        const isUpdated = await SurveysService.putSurvey(id, updatedSurvey, token);
         switch (isUpdated) {
             case true: toast.success("Successfully updated!"); break;
             case false:

@@ -1,32 +1,38 @@
-import { Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Button, useDisclosure, Checkbox, Input, Link } from "@nextui-org/react";
+import { Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Button, useDisclosure, Input } from "@nextui-org/react";
 import { MailIcon } from './Icons/MailIcon.jsx';
 import { LockIcon } from './Icons/LockIcon.jsx';
-import { useState } from "react";
+import { login, logout, selectToken } from "../store/userSlice.js";
+import { useDispatch, useSelector } from "react-redux";
+import { useForm } from "react-hook-form";
+import AccountService from "./Services/AccountService.js";
 
 export default function Account() {
     const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
-    const [isLoggedIn, setLoggedIn] = useState(false);
+    const dispatch = useDispatch()
+    const { register, handleSubmit } = useForm()
 
-    const handleLogin = () => {
-        setLoggedIn(!isLoggedIn);
-        // Додайте інші необхідні дії, наприклад, відкриття/закриття модалки
-        onOpen();
-      };
+    const submitForm = async (data) => {
+        const token = await AccountService.Login(data);
+        const user = data;
+
+        dispatch(login({ user, token }));
+    }
+
+    const token = useSelector(selectToken);
+    console.log('Token is: ', token);
 
     return (
         <div>
-            <Button onPress={handleLogin} color="primary">
-        {isLoggedIn ? 'Logout' : 'Login'}
-      </Button>
-            {/* <Button onPress={onOpen} color="primary">Open Modal</Button> */}
+            <Button onPress={onOpen} color="primary">Login</Button>
+            <Button onClick={() => dispatch(logout())} color="secondary">Logout</Button>
             <Modal
                 isOpen={isOpen}
                 onOpenChange={onOpenChange}
                 placement="top-center">
                 <ModalContent>
                     {(onClose) => (
-                        <>
+                        <form onSubmit={handleSubmit(submitForm)}>
                             <ModalHeader className="flex flex-col gap-1">Log in</ModalHeader>
                             <ModalBody>
                                 <Input
@@ -37,6 +43,8 @@ export default function Account() {
                                     label="Email"
                                     placeholder="Enter your email"
                                     variant="bordered"
+                                    {...register('email')}
+                                    required
                                 />
                                 <Input
                                     endContent={
@@ -46,29 +54,19 @@ export default function Account() {
                                     placeholder="Enter your password"
                                     type="password"
                                     variant="bordered"
+                                    {...register('password')}
+                                    required
                                 />
-                                <div className="flex py-2 px-1 justify-between">
-                                    <Checkbox
-                                        classNames={{
-                                            label: "text-small",
-                                        }}
-                                    >
-                                        Remember me
-                                    </Checkbox>
-                                    <Link color="primary" href="#" size="sm">
-                                        Forgot password?
-                                    </Link>
-                                </div>
                             </ModalBody>
                             <ModalFooter>
                                 <Button color="danger" variant="flat" onPress={onClose}>
                                     Close
                                 </Button>
-                                <Button color="primary" onPress={onClose}>
+                                <Button type="submit" color="primary" onPress={onClose}>
                                     Sign in
                                 </Button>
                             </ModalFooter>
-                        </>
+                        </form>
                     )}
                 </ModalContent>
             </Modal>

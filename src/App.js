@@ -5,16 +5,22 @@ import AddSurvey from "./components/Survey/AddSurvey";
 import EditSurvey from "./components/Survey/EditSurvey";
 import Survey from "./components/Survey/Survey";
 import SurveyResult from "./components/Survey/SurveyResult";
+import { useSelector } from "react-redux";
+import { selectUser } from "./store/userSlice";
 
 function App() {
-  console.log(process.env.SURVEY_API)
+
+  const user=useSelector(selectUser);
+
+  console.log(user);
+
   return (
     <div className="App">
       <Routes>
         <Route path='/' element={<Layout />}>
           <Route index element={<SurveysList/>} />
           <Route path='/surveys/:id' element={<Survey/>} />
-          <Route path='~/surveys/add' element={<AddSurvey/>} />
+          <Route path='/surveys/add' element={<AddSurvey/>} />
           <Route path='/survey/edit/:id' element={<EditSurvey/>} />
           <Route path='/survey/result/:id' element={<SurveyResult/>} />
           <Route path='*' element={<p>Page Not Found!</p>} />

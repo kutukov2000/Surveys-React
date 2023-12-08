@@ -6,8 +6,13 @@ import QuestionTypes from "./Helpers/QuestionTypes";
 import QuestionTypeDropdown from "./Helpers/QuestionTypeDropdown";
 import EditableVariants from './Helpers/EditableVariants';
 import { useForm } from 'react-hook-form';
+import { useSelector } from 'react-redux';
+import { selectToken } from '../../store/userSlice';
 
 function AddQuestion({ surveyId, onQuestionAdd }) {
+
+  //Get token
+  const token=useSelector(selectToken);
 
   //Form hook
   const { register, handleSubmit, formState: { errors }, reset} = useForm();

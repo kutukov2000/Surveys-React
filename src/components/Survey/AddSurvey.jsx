@@ -42,7 +42,7 @@ function AddSurvey() {
               labelPlacement="outside"
               type="text" />
             {errors.title && <p style={{ color: '#cc4137' }}>{errors.title.message}</p>}
-  
+
           </div>
           <div className="mb-3">
             <Textarea

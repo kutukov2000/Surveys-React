@@ -1,7 +1,7 @@
 import { Button, Card, CardHeader, Divider, CardBody, CardFooter } from '@nextui-org/react';
 import { Link } from 'react-router-dom';
 
-function SurveyCard({survey,onDelete}) {
+function SurveyCard({ survey, onDelete }) {
     return (
         <Card className='w-40'>
             <CardHeader>
@@ -17,7 +17,7 @@ function SurveyCard({survey,onDelete}) {
                     <Link to={`surveys/${survey.id}`}><Button color='primary'>Take a survey</Button></Link>
                     <Link to={`survey/result/${survey.id}`}><Button color='success' className='text-light'>Results</Button></Link>
                     <Link to={`survey/edit/${survey.id}`}><Button color='warning'>Edit survey</Button></Link>
-                    <Button onClick={() => onDelete(survey.id)} color='danger'>Delete</Button>
+                    <Button onClick={onDelete} color='danger'>Delete</Button>
                 </div>
             </CardFooter>
         </Card>

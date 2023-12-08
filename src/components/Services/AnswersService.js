@@ -1,16 +1,16 @@
-export default class AnswersService{
-    
-static async getByQuestionId(questionId){
-    const response = await fetch(`https://surveysapi.azurewebsites.net/api/Answers/byQuestionId?questionId=${questionId}`, {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-            });
+export default class AnswersService {
 
-            return response.json();
-}
-    
+    static async getByQuestionId(questionId) {
+        const response = await fetch(`https://surveysapi.azurewebsites.net/api/Answers/byQuestionId?questionId=${questionId}`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        });
+
+        return response.json();
+    }
+
     static async postAnswer(answer) {
         await fetch('https://surveysapi.azurewebsites.net/api/Answers', {
             method: 'POST',
@@ -21,11 +21,11 @@ static async getByQuestionId(questionId){
         });
     }
 
-    static async postAnswers(answers){
+    static async postAnswers(answers) {
         answers.forEach(async (answer) => await AnswersService.postAnswer(answer));
     }
 
-    static async deleteByQuestionId(questionId){
+    static async deleteByQuestionId(questionId) {
         try {
             const response = await fetch(`https://surveysapi.azurewebsites.net/api/Answers/byQuestionId?questionId=${questionId}`, {
                 method: 'DELETE',

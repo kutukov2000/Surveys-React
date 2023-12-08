@@ -3,8 +3,13 @@ import SurveyCard from "./SurveyCard";
 import { Link } from 'react-router-dom';
 import { Button, Spinner } from "@nextui-org/react";
 import SurveysService from "../Services/SurveysService";
+import { useSelector } from "react-redux";
+import { selectToken } from "../../store/userSlice";
 
 function SurveysList() {
+
+  //Get token
+  const token = useSelector(selectToken);
 
   const { isLoading, data } = useFetch("https://surveysapi.azurewebsites.net/api/Surveys");
   const surveys = data?.["$values"] || [];
@@ -17,10 +22,14 @@ function SurveysList() {
     );
   }
 
+  const onDelete = async (id) => {
+    await SurveysService.deleteSurvey(id, token);
+  }
+
   return (
     <div className='d-flex flex-column w-100 align-items-center gap-2 mt-2'>
       {surveys.map(survey => (
-        <SurveyCard key={survey.id} survey={survey} onDelete={()=>SurveysService.deleteSurvey(survey.id)}/>
+        <SurveyCard key={survey.id} survey={survey} onDelete={() => onDelete(survey.id)} />
       ))}
       <Link to={`surveys/add`} className="w-25 mb-2">
         <Button color="success" className="w-100 text-light">

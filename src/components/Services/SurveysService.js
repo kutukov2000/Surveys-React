@@ -6,11 +6,12 @@ export default class SurveysService {
         return  await response.json();;
     }
 
-    static async postSurvey(survey) {
-        const response = await fetch('https://surveysapi.azurewebsites.net/api/Surveys', {
+    static async postSurvey(survey,token) {
+        const response = await fetch('https://localhost:7258/api/Surveys', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
+                Authorization: `Bearer ${token}`
             },
             body: JSON.stringify(survey),
         });
@@ -20,12 +21,13 @@ export default class SurveysService {
         return response.ok;
     }
 
-    static async putSurvey(id, survey) {
+    static async putSurvey(id, survey,token) {
         try {
-            const response = await fetch(`https://surveysapi.azurewebsites.net/api/Surveys/${id}`, {
+            const response = await fetch(`https://localhost:7258/api/Surveys/${id}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
+                    Authorization: `Bearer ${token}`
                 },
                 body: JSON.stringify(survey),
             });
@@ -39,9 +41,10 @@ export default class SurveysService {
         }
     }
 
-    static async deleteSurvey(id) {
-        await fetch(`https://surveysapi.azurewebsites.net/api/Surveys/${id}`, {
+    static async deleteSurvey(id,token) {
+        await fetch(`https://localhost:7258/api/Surveys/${id}`, {
             method: 'DELETE',
+            Authorization: `Bearer ${token}`
         });
 
         window.location.reload();
