@@ -1,13 +1,16 @@
 import AnswersService from "./AnswersService";
 import VariantsService from "./VariantsService";
 
-export default class QuestionService{
+export default class QuestionService {
 
-    static async postQuestion(question){
-        const response = await fetch('https://surveysapi.azurewebsites.net/api/Questions', {
+    static surveyApiURL = 'https://surveysapi.azurewebsites.net/api/Questions'
+
+    static async postQuestion(question, token) {
+        const response = await fetch(this.surveyApiURL, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
+                Authorization: `Bearer ${token}`
             },
             body: JSON.stringify(question)
         });
@@ -15,15 +18,16 @@ export default class QuestionService{
         return await response.json();
     }
 
-    static async putQuestion(id,question){
+    static async putQuestion(id, question, token) {
 
         console.log('Question:', question);
 
         try {
-            const response = await fetch(`https://surveysapi.azurewebsites.net/api/Questions/${id}`, {
+            const response = await fetch(`${this.surveyApiURL}/${id}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
+                    Authorization: `Bearer ${token}`
                 },
                 body: JSON.stringify(question),
             });
@@ -41,9 +45,10 @@ export default class QuestionService{
         }
     };
 
-    static async deleteQuestion(id){
-        await fetch(`https://surveysapi.azurewebsites.net/api/Questions/${id}`, {
+    static async deleteQuestion(id, token) {
+        await fetch(`${this.surveyApiURL}/${id}`, {
             method: 'DELETE',
+            Authorization: `Bearer ${token}`
         });
 
         await VariantsService.deleteByQuestionId(id);

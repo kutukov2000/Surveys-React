@@ -8,8 +8,13 @@ import BackButton from "./Helpers/BackButton";
 import { toastOptions } from "./Helpers/toastConfig";
 import toast, { Toaster } from 'react-hot-toast';
 import '../Styles/SurveyWithQuastions.css'
+import { useSelector } from "react-redux";
+import { selectToken } from "../../store/userSlice";
 
 function Survey() {
+
+    //Get token
+    const token = useSelector(selectToken);
 
     //Load survey data
     const { id } = useParams();
@@ -33,7 +38,7 @@ function Survey() {
 
     async function postAnswers() {
 
-        await AnswersService.postAnswers(answers);
+        await AnswersService.postAnswers(answers,token);
 
         toast.success("We save your answer!");
     }

@@ -1,26 +1,26 @@
-export default class AccountService{
-    static async Login(newUser){
-        try {
-            const response = await fetch(`https://localhost:7258/api/Accounts/login`, {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json",
-              },
-              body: JSON.stringify(newUser),
-            });
-        
-            if (!response.ok) {
-              throw new Error("Invalid credentials");
-            }
-        
-            const data = await response.json();
+export default class AccountService {
+  static async Login(newUser) {
+    try {
+      const response = await fetch(`https://surveysapi.azurewebsites.net/api/Accounts/login`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(newUser),
+      });
 
-            return data.token; 
+      if (!response.ok) {
+        throw new Error("Invalid credentials");
+      }
 
-          } catch (error) {
-            console.error("Login failed", error);
-            throw error;
-          }
-        
+      const data = await response.json();
+
+      return data.token;
+
+    } catch (error) {
+      console.error("Login failed", error);
+      throw error;
     }
+
+  }
 }

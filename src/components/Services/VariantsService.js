@@ -1,14 +1,18 @@
-export default class VariantsService{
-    static async postVariant(questionId, variantText) {
+export default class VariantsService {
+
+    static surveyApiURL = 'https://surveysapi.azurewebsites.net/api/Variants';
+
+    static async postVariant(questionId, variantText, token) {
         const variant = {
             "text": variantText,
             "questionId": questionId
         }
 
-        await fetch('https://surveysapi.azurewebsites.net/api/Variants', {
+        await fetch(this.surveyApiURL, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
+                Authorization: `Bearer ${token}`
             },
             body: JSON.stringify(variant)
         });
@@ -16,12 +20,13 @@ export default class VariantsService{
         console.log(variant);
     }
 
-    static async deleteByQuestionId(questionId){
+    static async deleteByQuestionId(questionId, token) {
         try {
-            const response = await fetch(`https://surveysapi.azurewebsites.net/api/Variants/byQuestionId?questionId=${questionId}`, {
+            const response = await fetch(`${this.surveyApiURL}/byQuestionId?questionId=${questionId}`, {
                 method: 'DELETE',
                 headers: {
                     'Content-Type': 'application/json',
+                    Authorization: `Bearer ${token}`
                 },
             });
 

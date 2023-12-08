@@ -46,9 +46,9 @@ function AddQuestion({ surveyId, onQuestionAdd }) {
 
     setIsLoadingButton(true);
 
-    const createdQuestionId = await QuestionService.postQuestion(question);
+    const createdQuestionId = await QuestionService.postQuestion(question, token);
 
-    variants.forEach(async (variant) => await VariantsService.postVariant(createdQuestionId, variant.text));
+    variants.forEach(async (variant) => await VariantsService.postVariant(createdQuestionId, variant.text, token));
 
     setIsLoadingButton(false);
     const newQuestion = {

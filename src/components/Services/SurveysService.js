@@ -1,13 +1,15 @@
 export default class SurveysService {
 
+    static surveyApiURL='https://surveysapi.azurewebsites.net/api/Surveys';
+
     static async getSurveys(){
-        const response= await fetch('https://surveysapi.azurewebsites.net/api/Surveys');
+        const response= await fetch(this.surveyApiURL);
 
         return  await response.json();;
     }
 
     static async postSurvey(survey,token) {
-        const response = await fetch('https://localhost:7258/api/Surveys', {
+        const response = await fetch(this.surveyApiURL, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -23,7 +25,7 @@ export default class SurveysService {
 
     static async putSurvey(id, survey,token) {
         try {
-            const response = await fetch(`https://localhost:7258/api/Surveys/${id}`, {
+            const response = await fetch(`${this.surveyApiURL}/${id}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
@@ -42,7 +44,7 @@ export default class SurveysService {
     }
 
     static async deleteSurvey(id,token) {
-        await fetch(`https://localhost:7258/api/Surveys/${id}`, {
+        await fetch(`${this.surveyApiURL}/${id}`, {
             method: 'DELETE',
             Authorization: `Bearer ${token}`
         });

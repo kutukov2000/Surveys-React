@@ -6,8 +6,13 @@ import QuestionTypes from "./Helpers/QuestionTypes";
 import QuestionTypeDropdown from "./Helpers/QuestionTypeDropdown";
 import EditableVariants from "./Helpers/EditableVariants";
 import { useForm } from "react-hook-form";
+import { useSelector } from "react-redux";
+import { selectToken } from "../../store/userSlice";
 
 function EditQuestion({ question, onDelete }) {
+
+    //Get token
+    const token = useSelector(selectToken)
 
     //Form hook
     const { register, handleSubmit, formState: { errors } } = useForm();
@@ -23,7 +28,7 @@ function EditQuestion({ question, onDelete }) {
     );
 
     const handleQuestionDelete = async () => {
-        await QuestionService.deleteQuestion(question.id);
+        await QuestionService.deleteQuestion(question.id, token);
         onDelete(question.id);
     };
 
@@ -42,13 +47,13 @@ function EditQuestion({ question, onDelete }) {
     const putQuestionWithVariants = async (title) => {
 
         // Put Question {text, type}
-        await QuestionService.putQuestion(question.id, { "text": title, "type": QuestionTypes.getTypeByText(questionType) })
+        await QuestionService.putQuestion(question.id, { "text": title, "type": QuestionTypes.getTypeByText(questionType) }, token)
 
         // Remove old variants by questionId
-        await VariantsService.deleteByQuestionId(question.id);
+        await VariantsService.deleteByQuestionId(question.id, token);
 
         //Add new variants
-        variants.forEach((variant) => VariantsService.postVariant(question.id, variant.text));
+        variants.forEach((variant) => VariantsService.postVariant(question.id, variant.text, token));
     }
 
     const onSubmit = async (data) => {

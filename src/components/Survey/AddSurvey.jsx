@@ -5,8 +5,13 @@ import toast, { Toaster } from "react-hot-toast";
 import { toastOptions } from "./Helpers/toastConfig";
 import SurveysService from "../Services/SurveysService";
 import BackButton from "./Helpers/BackButton";
+import { useSelector } from 'react-redux';
+import { selectToken } from '../../store/userSlice';
 
 function AddSurvey() {
+
+  //Get token
+  const token = useSelector(selectToken);
 
   //Loading Button
   const [isLoadingButton, setIsLoadingButton] = useState(false);
@@ -19,7 +24,7 @@ function AddSurvey() {
 
     setIsLoadingButton(true);
 
-    const isCreated = await SurveysService.postSurvey(newSurvey);
+    const isCreated = await SurveysService.postSurvey(newSurvey,token);
     switch (isCreated) {
       case true: toast.success("Successfully created!"); break;
       case false:
