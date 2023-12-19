@@ -46,7 +46,9 @@ export default class SurveysService {
     static async deleteSurvey(id,token) {
         await fetch(`${this.surveyApiURL}/${id}`, {
             method: 'DELETE',
-            Authorization: `Bearer ${token}`
+            headers:{
+                Authorization: `Bearer ${token}`
+            }
         });
 
         window.location.reload();
