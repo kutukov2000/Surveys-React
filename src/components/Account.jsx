@@ -1,7 +1,7 @@
 import { Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Button, useDisclosure, Input } from "@nextui-org/react";
 import { MailIcon } from './Icons/MailIcon.jsx';
 import { LockIcon } from './Icons/LockIcon.jsx';
-import { login, logout, selectToken } from "../store/userSlice.js";
+import { login, logout, selectIsLoggined, selectToken } from "../store/userSlice.js";
 import { useDispatch, useSelector } from "react-redux";
 import { useForm } from "react-hook-form";
 import AccountService from "./Services/AccountService.js";
@@ -22,10 +22,16 @@ export default function Account() {
     const token = useSelector(selectToken);
     console.log('Token is: ', token);
 
+    const isLogged = useSelector(selectIsLoggined);
+    console.log(isLogged);
+
     return (
         <div>
-            <Button onPress={onOpen} color="primary">Login</Button>
-            <Button onClick={() => dispatch(logout())} color="secondary">Logout</Button>
+            {!isLogged ? (
+                <Button onPress={onOpen} color="primary"> Login </Button>
+            ) : (
+                <Button onPress={() => dispatch(logout())} color="secondary"> Logout </Button>
+            )}
             <Modal
                 isOpen={isOpen}
                 onOpenChange={onOpenChange}
