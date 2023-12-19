@@ -1,6 +1,7 @@
 import React from 'react'
 import Menu from './Menu'
 import Account from './Account'
+import Register from './Register'
 export default function Header() {
 
 
@@ -8,6 +9,7 @@ export default function Header() {
         <header>
             <Menu />
             <Account />
+            <Register/>
         </header>
     )
 }
