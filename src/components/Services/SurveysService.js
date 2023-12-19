@@ -50,7 +50,5 @@ export default class SurveysService {
                 Authorization: `Bearer ${token}`
             }
         });
-
-        window.location.reload();
     };
 }

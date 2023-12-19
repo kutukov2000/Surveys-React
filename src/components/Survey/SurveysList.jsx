@@ -5,14 +5,23 @@ import { Button, Spinner } from "@nextui-org/react";
 import SurveysService from "../Services/SurveysService";
 import { useSelector } from "react-redux";
 import { selectToken } from "../../store/userSlice";
+import { useEffect, useState } from "react";
 
 function SurveysList() {
 
   //Get token
   const token = useSelector(selectToken);
 
+  const [surveys, setSurveys] = useState([]);
+
   const { isLoading, data } = useFetch("https://surveysapi.azurewebsites.net/api/Surveys");
-  const surveys = data?.["$values"] || [];
+
+  useEffect(() => {
+    if (data) {
+      const surveysData = data["$values"] || [];
+      setSurveys(surveysData);
+    }
+  }, [data]);
 
   if (isLoading) {
     return (
@@ -24,6 +33,8 @@ function SurveysList() {
 
   const onDelete = async (id) => {
     await SurveysService.deleteSurvey(id, token);
+
+    setSurveys(prevSurveys => prevSurveys.filter(survey => survey.id !== id));
   }
 
   return (
