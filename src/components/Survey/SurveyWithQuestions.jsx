@@ -1,7 +1,6 @@
 import EditQuestion from "../Question/EditQuestion";
 import AddQuestion from '../Question/AddQuestion';
 import { useState } from 'react';
-import '../Styles/SurveyWithQuastions.css';
 
 function SurveyWithQuestions({ survey }) {
   const [questions, setQuestions] = useState(survey.questions.$values);

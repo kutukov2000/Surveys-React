@@ -20,10 +20,6 @@ code {
   width: 45vw !important;
 }
 
-.h-2{
-  height: 2vw !important;
-}
-
 .App>div{
   height: 100vh;
 }

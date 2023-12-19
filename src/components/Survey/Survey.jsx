@@ -7,7 +7,6 @@ import AnswersService from "../Services/AnswersService";
 import BackButton from "./Helpers/BackButton";
 import { toastOptions } from "./Helpers/toastConfig";
 import toast, { Toaster } from 'react-hot-toast';
-import '../Styles/SurveyWithQuastions.css'
 import { useSelector } from "react-redux";
 import { selectToken } from "../../store/userSlice";
 
