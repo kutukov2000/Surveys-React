@@ -35,7 +35,7 @@ export default function Register() {
     return (
         <div>
             {!isLogged && (
-                <Button onPress={onOpen} color="primary"> Register </Button>
+                <Button onPress={onOpen} color="primary" variant="ghost"> Register </Button>
             )}
             <Modal
                 isOpen={isOpen}
