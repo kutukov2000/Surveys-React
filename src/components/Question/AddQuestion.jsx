@@ -65,7 +65,7 @@ function AddQuestion({ surveyId, onQuestionAdd }) {
   }
 
   return (
-    <Card className="w-40">
+    <Card className="w-45">
       <form onSubmit={handleSubmit(onSubmit)}>
         <CardHeader className='flex-column align-items-start gap-3'>
           <Input

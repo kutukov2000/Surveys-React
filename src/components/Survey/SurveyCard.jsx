@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 
 function SurveyCard({ survey, onDelete }) {
     return (
-        <Card className='w-40'>
+        <Card className='w-45'>
             <CardHeader>
                 <h5 className="fs-3 fw-semibold">{survey.title}</h5>
             </CardHeader>

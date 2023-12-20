@@ -66,7 +66,7 @@ function EditQuestion({ question, onDelete }) {
     }
 
     return (
-        <Card className="w-40">
+        <Card className="w-45">
             <form onSubmit={handleSubmit(onSubmit)}>
                 <CardHeader className='flex-column align-items-start gap-3'>
                     <div className="d-flex justify-content-between align-items-center gap-2 w-100">

@@ -46,7 +46,7 @@ function Question({ id: questionId, text, variants, questionType, onAnswerSelect
     }
 
     return (
-        <Card className="w-40">
+        <Card className="w-45">
             <CardHeader>
                 <h5>{text}</h5>
             </CardHeader>

@@ -38,7 +38,7 @@ function AddSurvey() {
     <div className="m-3">
       <BackButton />
       <div className="d-flex justify-content-center mt-3">
-        <form className="w-40" onSubmit={handleSubmit(onSubmit)}>
+        <form className="w-45" onSubmit={handleSubmit(onSubmit)}>
           <div className="mb-3">
             <Input
               {...register('title', { required: 'Title is required' })}
