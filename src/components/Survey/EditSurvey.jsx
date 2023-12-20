@@ -44,7 +44,7 @@ function EditSurvey() {
 
     if (isLoading) {
         return (
-            <LoadingIndicator/>
+            <LoadingIndicator />
         );
     }
 
@@ -53,24 +53,23 @@ function EditSurvey() {
             <BackButton />
             <div className="d-flex flex-column align-items-center mt-3">
                 <form className="w-45" onSubmit={handleSubmit(onSubmit)}>
-                    <div className="mb-3">
-                        <Input
-                            {...register('title', { required: 'Title is required' })}
-                            label="Title"
-                            labelPlacement="outside"
-                            type='text'
-                            variant="bordered"
-                            defaultValue={survey.title} />
-                        {errors.title && <p style={{ color: '#cc4137' }}>{errors.title.message}</p>}
-                    </div>
-                    <div className="mb-3">
-                        <Textarea
-                            {...register('description')}
-                            label="Description"
-                            labelPlacement="outside"
-                            variant="bordered"
-                            defaultValue={survey.description} />
-                    </div>
+                    <Input
+                        {...register('title', { required: 'Title is required' })}
+                        label="Title"
+                        labelPlacement="outside"
+                        type='text'
+                        variant="bordered"
+                        defaultValue={survey.title}
+                        className="mb-3" />
+                    {errors.title && <p style={{ color: '#cc4137' }}>{errors.title.message}</p>}
+
+                    <Textarea
+                        {...register('description')}
+                        label="Description"
+                        labelPlacement="outside"
+                        variant="bordered"
+                        defaultValue={survey.description}
+                        className="mb-3" />
                     <div className='d-flex justify-content-end'>
                         <Button type="submit" color="primary" isLoading={isLoadingButton}>
                             {isLoadingButton ? 'Updating' : 'Update'}

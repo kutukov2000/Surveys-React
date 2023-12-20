@@ -24,7 +24,7 @@ function AddSurvey() {
 
     setIsLoadingButton(true);
 
-    const isCreated = await SurveysService.postSurvey(newSurvey,token);
+    const isCreated = await SurveysService.postSurvey(newSurvey, token);
     switch (isCreated) {
       case true: toast.success("Successfully created!"); break;
       case false:
@@ -39,23 +39,21 @@ function AddSurvey() {
       <BackButton />
       <div className="d-flex justify-content-center mt-3">
         <form className="w-45" onSubmit={handleSubmit(onSubmit)}>
-          <div className="mb-3">
-            <Input
-              {...register('title', { required: 'Title is required' })}
-              variant="bordered"
-              label="Title"
-              labelPlacement="outside"
-              type="text" />
-            {errors.title && <p style={{ color: '#cc4137' }}>{errors.title.message}</p>}
+          <Input
+            {...register('title', { required: 'Title is required' })}
+            variant="bordered"
+            label="Title"
+            labelPlacement="outside"
+            type="text"
+            className="mb-3" />
+          {errors.title && <p style={{ color: '#cc4137' }}>{errors.title.message}</p>}
 
-          </div>
-          <div className="mb-3">
-            <Textarea
-              {...register('description')}
-              label="Description"
-              labelPlacement="outside"
-              variant="bordered" />
-          </div>
+          <Textarea
+            {...register('description')}
+            label="Description"
+            labelPlacement="outside"
+            variant="bordered"
+            className='mb-3' />
           <div className='d-flex justify-content-end'>
             <Button type="submit" color="primary" isLoading={isLoadingButton}>
               {isLoadingButton ? 'Creating' : 'Create'}
