@@ -1,4 +1,4 @@
-import { Button, Input, Spinner, Textarea } from '@nextui-org/react';
+import { Button, Input, Textarea } from '@nextui-org/react';
 import useFetch from 'react-fetch-hook';
 import { useParams } from 'react-router-dom';
 import SurveyWithQuestions from './SurveyWithQuestions';
@@ -10,6 +10,7 @@ import { useForm } from 'react-hook-form';
 import { toastOptions } from './Helpers/toastConfig';
 import { useSelector } from 'react-redux';
 import { selectToken } from '../../store/userSlice';
+import LoadingIndicator from '../LoadingIndicator';
 
 function EditSurvey() {
 
@@ -43,9 +44,7 @@ function EditSurvey() {
 
     if (isLoading) {
         return (
-            <div className="d-flex justify-content-center align-items-center h-100 w-100">
-                <Spinner size="lg" />
-            </div>
+            <LoadingIndicator/>
         );
     }
 

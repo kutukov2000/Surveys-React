@@ -1,7 +1,7 @@
 import Question from "../Question/Question";
 import useFetch from "react-fetch-hook";
 import { useParams } from "react-router-dom";
-import { Button, Spinner } from "@nextui-org/react";
+import { Button } from "@nextui-org/react";
 import { useState } from "react";
 import AnswersService from "../Services/AnswersService";
 import BackButton from "./Helpers/BackButton";
@@ -9,6 +9,7 @@ import { toastOptions } from "./Helpers/toastConfig";
 import toast, { Toaster } from 'react-hot-toast';
 import { useSelector } from "react-redux";
 import { selectToken } from "../../store/userSlice";
+import LoadingIndicator from "../LoadingIndicator";
 
 function Survey() {
 
@@ -44,9 +45,7 @@ function Survey() {
 
     if (isLoading) {
         return (
-            <div className="d-flex justify-content-center align-items-center h-100 w-100">
-                <Spinner size="lg" />
-            </div>
+            <LoadingIndicator/>
         );
     }
 

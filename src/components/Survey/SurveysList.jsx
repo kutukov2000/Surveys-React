@@ -1,11 +1,12 @@
 import useFetch from "react-fetch-hook";
 import SurveyCard from "./SurveyCard";
 import { Link } from 'react-router-dom';
-import { Button, Spinner } from "@nextui-org/react";
+import { Button } from "@nextui-org/react";
 import SurveysService from "../Services/SurveysService";
 import { useSelector } from "react-redux";
 import { selectToken } from "../../store/userSlice";
 import { useEffect, useState } from "react";
+import LoadingIndicator from "../LoadingIndicator";
 
 function SurveysList() {
 
@@ -25,9 +26,7 @@ function SurveysList() {
 
   if (isLoading) {
     return (
-      <div className="d-flex justify-content-center align-items-center h-100 w-100">
-        <Spinner size="lg" />
-      </div>
+      <LoadingIndicator/>
     );
   }
 

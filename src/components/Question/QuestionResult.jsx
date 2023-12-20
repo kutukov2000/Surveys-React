@@ -1,6 +1,7 @@
-import { Card, CardHeader, CardBody, Divider, Spinner, Listbox, ListboxItem } from "@nextui-org/react";
+import { Card, CardHeader, CardBody, Divider, Listbox, ListboxItem } from "@nextui-org/react";
 import useFetch from "react-fetch-hook";
 import { useState, useEffect } from "react";
+import LoadingIndicator from "../LoadingIndicator";
 
 function QuestionResult({ id: questionId, text }) {
 
@@ -25,9 +26,7 @@ function QuestionResult({ id: questionId, text }) {
 
     if (isLoading) {
         return (
-            <div className="d-flex justify-content-center align-items-center h-100 w-100">
-                <Spinner size="lg" />
-            </div>
+            <LoadingIndicator/>
         );
     }
 

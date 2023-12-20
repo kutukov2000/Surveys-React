@@ -1,10 +1,10 @@
 import { useParams } from "react-router-dom";
-import { Spinner } from "@nextui-org/react";
 import { Toaster } from "react-hot-toast";
 import { toastOptions } from "./Helpers/toastConfig";
 import useFetch from "react-fetch-hook";
 import BackButton from "./Helpers/BackButton";
 import QuestionResult from "../Question/QuestionResult";
+import LoadingIndicator from "../LoadingIndicator";
 
 function SurveyResult(){
 
@@ -14,9 +14,7 @@ function SurveyResult(){
 
     if (isLoading) {
         return (
-            <div className="d-flex justify-content-center align-items-center h-100 w-100">
-                <Spinner size="lg" />
-            </div>
+            <LoadingIndicator/>
         );
     }
 
