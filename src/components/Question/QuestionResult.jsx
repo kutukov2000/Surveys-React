@@ -2,10 +2,10 @@ import { Card, CardHeader, CardBody, Divider, Listbox, ListboxItem } from "@next
 import useFetch from "react-fetch-hook";
 import { useState, useEffect } from "react";
 
-function QuestionResult({ id: questionId, text }) {
+function QuestionResult({ id, text }) {
 
     //Load Answers
-    const { isLoading, data: answers } = useFetch(`https://surveysapi.azurewebsites.net/api/Answers/byQuestionId?questionIdid=${questionId}`);
+    const { isLoading, data: answers } = useFetch(`https://surveysapi.azurewebsites.net/api/Answers/byQuestionId?questionIdid=${id}`);
 
     //Show only unique answers
     const [uniqueAnswers, setUniqueAnswers] = useState([]);
