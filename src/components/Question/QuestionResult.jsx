@@ -1,7 +1,6 @@
 import { Card, CardHeader, CardBody, Divider, Listbox, ListboxItem } from "@nextui-org/react";
 import useFetch from "react-fetch-hook";
 import { useState, useEffect } from "react";
-import LoadingIndicator from "../LoadingIndicator";
 
 function QuestionResult({ id: questionId, text }) {
 
@@ -23,12 +22,6 @@ function QuestionResult({ id: questionId, text }) {
         const totalAnswers = answers.$values.length;
         return ((occurrences / totalAnswers) * 100).toFixed(2);
     };
-
-    if (isLoading) {
-        return (
-            <LoadingIndicator/>
-        );
-    }
 
     return (
         <Card className="w-45">
