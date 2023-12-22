@@ -27,7 +27,7 @@ function SurveyResult(){
                     <p>{survey.description}</p>
                     <div className="d-flex flex-column gap-3 mb-3 mt-3">
                         {survey.questions.$values.map(question => (
-                            <QuestionResult key={question.id} id={question.id} text={question.text} />
+                            <QuestionResult key={question.id} {...question} />
                         ))}
                     </div>
                 </div>

@@ -58,7 +58,7 @@ function Survey() {
                     <p>{survey.description}</p>
                     <div className="d-flex flex-column gap-3 mb-3 mt-3">
                         {survey.questions.$values.map(question => (
-                            <Question key={question.id} id={question.id} text={question.text} variants={question.variants} questionType={question.type} onAnswerSelected={handleAnswerChanged} />
+                            <Question key={question.id} question={question} onAnswerSelected={handleAnswerChanged} />
                         ))}
                     </div>
                     <div className="d-flex justify-content-end">
